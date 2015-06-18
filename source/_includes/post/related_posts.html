@@ -1,4 +1,4 @@
-{%if site.related_posts%}
+{%if site.related_posts and page.related_posts%}
 <div class="related_posts">
 {%capture text%}{%if site.related_posts_text%}{{site.related_posts_text}}{%else%}You might also like...{%endif%}{%endcapture%}
 <h3>{{text}}</h3>
