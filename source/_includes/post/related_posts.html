@@ -1,5 +1,5 @@
 <div class="related_posts">
-{%capture text%}{%if site.related_posts_text%}{{site.related_posts_text}}{%else%}You might also like...{%endif%}
+{%capture text%}{%if site.related_posts_text%}{{site.related_posts_text}}{%else%}You might also like...{%endif%}{%endcapture%}
 <h3>{{text}}</h3>
 {% unless site.related_posts_show %}
 <ul class="posts">
