@@ -1,0 +1,10 @@
+
+# Related post
+related_posts: 20
+related_posts_show: 5
+related_posts_text: "You might also like..."
+
+# jekyll-var
+jekyll_var:
+  include:
+    - related_posts_show

@@ -1,25 +1,19 @@
-require 'jekyll/post'
-
 module Jekyll
-  module RelatedPostsByTags
-    # Used to remove #related_posts so that it can be overridden
-    def self.included(klass)
-      klass.class_eval do
-        remove_method :related_posts
-      end
-    end
+  class RelatedPostsGenerator < Generator
+    safe :true
+    priority :lower
 
     # Calculate related posts.
     # Returns [<Post>]
-    def related_posts(posts)
+    def related_posts(me, posts)
       return [] unless posts.size > 1
-      highest_freq = tag_freq(posts).values.max
+      highest_freq = @tag_freq.values.max
       related_scores = Hash.new(0)
 
       posts.each do |post|
         post.tags.each do |tag|
-          if self.tags.include?(tag) && post != self
-            cat_freq = tag_freq(posts)[tag]
+          if me.tags.include?(tag) && post != me
+            cat_freq = @tag_freq[tag]
             related_scores[post] += (1+highest_freq-cat_freq)
           end
         end
@@ -31,12 +25,10 @@ module Jekyll
     # Calculate the frequency of each tag.
     # Returns {tag => freq, tag => freq, ...}
     def tag_freq(posts)
-      return @tag_freq if @tag_freq
       @tag_freq = Hash.new(0)
       posts.each do |post|
         post.tags.each {|tag| @tag_freq[tag] += 1}
       end
-      @tag_freq
     end
 
     # Sort the related posts in order of their score and date
@@ -52,9 +44,16 @@ module Jekyll
         end
       end.collect {|post,freq| post}
     end
-  end
 
-  class Post
-    include RelatedPostsByTags
+    def generate(site)
+      if !site.config['related_posts']
+        return
+      end
+      n_posts = site.config['related_posts']
+      tag_freq(site.posts)
+      Parallel.map(site.posts.flatten, :in_threads => site.config['n_cores'] ? site.config['n_cores'] : 1) do |post|
+        post.data.merge!('related_posts' => related_posts(post, site.posts)[0, n_posts])
+      end
+    end
   end
 end

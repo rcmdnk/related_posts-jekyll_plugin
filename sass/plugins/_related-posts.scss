@@ -1,0 +1,17 @@
+.posts {
+  margin-top: 0.5em;
+
+  li {
+    list-style: none;
+    padding: .5em 0;
+    margin: 0;
+    border-bottom: 1px solid $sidebar-border;
+    @extend .side-shadow-border;
+    p:last-child {
+      margin-bottom: 0;
+    }
+    &.index_click_box {
+      margin-top: 0.5em;
+    }
+  }
+}
