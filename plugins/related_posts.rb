@@ -52,7 +52,10 @@ module Jekyll
       n_posts = site.config['related_posts']
       tag_freq(site.posts)
       Parallel.map(site.posts.flatten, :in_threads => site.config['n_cores'] ? site.config['n_cores'] : 1) do |post|
-        post.data.merge!('related_posts' => related_posts(post, site.posts)[0, n_posts])
+        rp = related_posts(post, site.posts)[0, n_posts]
+        if rp.size > 0
+          post.data.merge!('related_posts' => rp)
+        end
       end
     end
   end
