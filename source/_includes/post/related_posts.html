@@ -17,7 +17,7 @@
   if(!('related_list' in window)){
     related_list=[
       {% for post in page.related_posts %}
-      {% capture p %}{%include post_list.html%}{% endcapture %}
+      {% capture p %}{%include post/post_list.html%}{% endcapture %}
       "{{p|strip_newlines|replace: '"', '\\"'}}",
       {% endfor %}
     ];
