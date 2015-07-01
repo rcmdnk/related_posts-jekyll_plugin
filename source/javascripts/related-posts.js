@@ -1,6 +1,6 @@
 var relatedList = function () {
   if(!('related_list' in window)){
-    console.log('still no related_list!');
+    //console.log('still no related_list!');
     return;
   }
   var nentries = related_list.length;
