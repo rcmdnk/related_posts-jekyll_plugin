@@ -1,9 +1,9 @@
 
 # Related post
-related_posts: 20
-related_posts_show: 5
-related_tags: true
-related_categories: true
+related_posts: 20 # If not set, don't make related list.
+related_posts_show: 5 # If set, choose 'related_posts_show' posts of 'related_posts' randomly.
+related_tags: true # Use tags for relations, default true
+related_categories: true # Use categories for relations, default false
 related_posts_text: "You might also like..."
 
 # jekyll-var
