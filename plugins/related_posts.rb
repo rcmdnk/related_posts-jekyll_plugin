@@ -11,10 +11,20 @@ module Jekyll
       related_scores = Hash.new(0)
 
       posts.each do |post|
-        post.tags.each do |tag|
-          if me.tags.include?(tag) && post != me
-            cat_freq = @tag_freq[tag]
-            related_scores[post] += (1+highest_freq-cat_freq)
+        if @use_categories
+          post.categories.each do |category|
+            if me.categories.include?(category) && post != me
+              cat_freq = @tag_freq[category]
+              related_scores[post] += (1+highest_freq-cat_freq)
+            end
+          end
+        end
+        if @use_tags
+          post.tags.each do |tag|
+            if me.tags.include?(tag) && post != me
+              cat_freq = @tag_freq[tag]
+              related_scores[post] += (1+highest_freq-cat_freq)
+            end
           end
         end
       end
@@ -27,7 +37,12 @@ module Jekyll
     def tag_freq(posts)
       @tag_freq = Hash.new(0)
       posts.each do |post|
-        post.tags.each {|tag| @tag_freq[tag] += 1}
+        if @use_categories
+          post.categories.each {|category| @tag_freq[category] += 1}
+        end
+        if @use_tags
+          post.tags.each {|tag| @tag_freq[tag] += 1}
+        end
       end
     end
 
@@ -50,6 +65,14 @@ module Jekyll
         return
       end
       n_posts = site.config['related_posts']
+      @use_tags = true
+      @use_categories = false
+      if site.config['related_categories']
+        @use_categories = true
+      end
+      if site.config['related_tags'] != nil and site.config['related_tags'] != true
+        @use_tags = false
+      end
       tag_freq(site.posts)
       Parallel.map(site.posts.flatten, :in_threads => site.config['n_cores'] ? site.config['n_cores'] : 1) do |post|
         rp = related_posts(post, site.posts)[0, n_posts]
