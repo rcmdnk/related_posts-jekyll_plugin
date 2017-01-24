@@ -1,28 +1,28 @@
 {%if site.related_posts and page.related_posts%}
-  <div class="related_posts">
-  {%capture text%}{%if site.related_posts_text%}{{site.related_posts_text}}{%else%}You might also like...{%endif%}{%endcapture%}
-  <h3>{{text}}</h3>
-  {% unless site.related_posts_show %}
-    <ul class="posts">
-      {% for post in page.related_posts %}
-      <li class="post index_click_box">
-        {% include post/post_list.html%}
-      </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <ul class="posts" id="related-posts-list">
-    </ul>
-    <script>
-      if(!('related_list' in window)){
-        related_list=[
-          {% for post in page.related_posts %}
-          {% capture p %}{%include post/post_list.html%}{% endcapture %}
-          "{{p|strip_newlines|replace: '"', '\\"'}}",
-          {% endfor %}
-        ];
-      }
-    </script>
-  {% endunless %}
+  <div class="related_posts part">
+    {%capture text%}{%if site.related_posts_text%}{{site.related_posts_text}}{%else%}You might also like...{%endif%}{%endcapture%}
+    <h3>{{text}}</h3>
+    {% unless site.related_posts_show %}
+      <ul class="posts">
+        {% for post in page.related_posts %}
+        <li class="post index_click_box">
+          {% include post/post_list.html%}
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <ul class="posts" id="related-posts-list">
+      </ul>
+      <script>
+        if(!('related_list' in window)){
+          related_list=[
+            {% for post in page.related_posts %}
+            {% capture p %}{%include post/post_list.html%}{% endcapture %}
+            "{{p|strip_newlines|replace: '"', '\\"'}}",
+            {% endfor %}
+          ];
+        }
+      </script>
+    {% endunless %}
   </div>
 {%endif%}
